@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ยินดีต้อนรับ</title>
+
+<style>
+/* ===== RESET ===== */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+/* ===== BODY ===== */
+body{
+  width:100vw;
+  height:100vh;
+  background:linear-gradient(135deg,#4e54c8,#8f94fb);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:'Arial',sans-serif;
+  cursor:pointer;
+  overflow:hidden;
+}
+
+/* ===== WELCOME BOX ===== */
+.welcome{
+  text-align:center;
+  color:white;
+  animation:fadeIn 1.2s ease;
+}
+
+.welcome h1{
+  font-size:3rem;
+  margin-bottom:10px;
+}
+
+.welcome p{
+  font-size:1.2rem;
+  opacity:0.9;
+}
+
+/* ===== CLICK EFFECT ===== */
+body.active .welcome{
+  animation:zoomOut 0.8s ease forwards;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn{
+  from{opacity:0;transform:scale(0.9);}
+  to{opacity:1;transform:scale(1);}
+}
+
+@keyframes zoomOut{
+  to{
+    opacity:0;
+    transform:scale(1.3);
+  }
+}
+</style>
+</head>
+
+<body onclick="goLogin()">
+
+  <div class="welcome">
+    <h1>ยินดีต้อนรับ</h1>
+    <p>แตะที่ใดก็ได้เพื่อเข้าสู่ระบบ</p>
+  </div>
+
+<script>
+function goLogin(){
+  document.body.classList.add("active");
+
+  setTimeout(()=>{
+    window.location.href = "login.html";
+  },800); // เวลาให้อนิเมชันเล่นจบ
+}
+</script>
+
+</body>
+</html>
