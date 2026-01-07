@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แก้ไขแนะนำ</title>
+
+<style>
+body{
+  background:#0f172a;
+  color:white;
+  font-family:Arial;
+}
+
+.box{
+  max-width:400px;
+  margin:40px auto;
+  padding:20px;
+  background:#111827;
+  border-radius:15px;
+}
+
+input,textarea{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  margin-top:10px;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  margin-top:15px;
+  border-radius:10px;
+  border:none;
+  background:#2563eb;
+  color:white;
+  font-size:16px;
+}
+
+button:hover{
+  background:#1d4ed8;
+}
+label{opacity:.9}
+</style>
+
+</head>
+<body>
+
+<div class="box">
+  <h2>แก้ไขแนะนำ</h2>
+
+  <label>ชื่อเรื่อง</label>
+  <input type="text" id="title">
+
+  <label>เรื่องย่อ</label>
+  <textarea id="summary" rows="3"></textarea>
+
+  <label>เนื้อหาด้านใน</label>
+  <textarea id="content" rows="6"></textarea>
+
+  <label>รูปแนะนำ</label>
+  <img id="previewImage" src="" style="width:100%;border-radius:10px;margin-top:10px;display:none">
+
+  <input type="file" id="imageFile" accept="image/*">
+
+  <button onclick="saveEdit()">บันทึก</button>
+  <button onclick="history.back()">ยกเลิก</button>
+</div>
+
+<script>
+let postser = JSON.parse(localStorage.getItem("postser")) || [];
+
+// รับ id จาก URL
+const params = new URLSearchParams(window.location.search);
+let id = params.get("id");
+
+// ถ้าไม่เจอข้อมูล
+if(!postser[id]){
+  alert("ไม่พบข้อมูลโพสต์");
+  location.href="../system.php";
+}
+
+// โหลดข้อมูลเดิม
+document.getElementById("title").value = postser[id].title || "";
+document.getElementById("summary").value = postser[id].summary || "";
+document.getElementById("content").value = postser[id].content || "";
+
+if(postser[id].image){
+  previewImage.src = postser[id].image;
+  previewImage.style.display = "block";
+}
+
+// เลือกรูปแล้วแสดงทันที
+document.getElementById("imageFile").addEventListener("change", function(){
+  let file = this.files[0];
+  if(!file) return;
+
+  let reader = new FileReader();
+  reader.onload = function(e){
+    previewImage.src = e.target.result;
+    previewImage.style.display = "block";
+    postser[id].image = e.target.result;
+  }
+  reader.readAsDataURL(file);
+});
+
+// บันทึก
+function saveEdit(){
+  postser[id].title = document.getElementById("title").value;
+  postser[id].summary = document.getElementById("summary").value;
+  postser[id].content = document.getElementById("content").value;
+
+  localStorage.setItem("postser", JSON.stringify(postser));
+
+  alert("แก้ไขสำเร็จ");
+  location.href="../system.php";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="section-title">
+  <h3>ข่าวสาร</h3>
+  
+</div>
+<!--------------------------->
+<!--------------------------->
+<div class="box_1" style="overflow-x:auto; white-space:nowrap;">
+    <div class="box_s" style="overflow-x:auto;">
+        <div id="feed" style="display:;gap:10px;flex-wrap:nowrap;"></div>
+    </div>
+</div>
+<style>
+.menu3{
+  position:absolute;
+  top:8px;
+  right:8px;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:rgba(0,0,0,0.6);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.menu-box{
+  position:absolute;
+  top:35px;
+  right:8px;
+  background:white;
+  border-radius:10px;
+  box-shadow:0 5px 15px rgba(0,0,0,.3);
+  overflow:hidden;
+  display:none;
+}
+
+.menu-box div{
+  padding:10px 15px;
+  cursor:pointer;
+}
+
+.menu-box div:hover{
+  background:#f1f1f1;
+}
+</style>
+
+<script>
+let posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+function renderFeed(){
+  let html = "";
+
+  posts.forEach((p,i)=>{
+    html += `
+      <div style="
+        width:250px;height:350px;border-radius:18px;
+        background:url('${p.image}');
+        background-size:cover;background-position:center;
+        position:relative;overflow:hidden;
+        display:inline-block; margin-right:10px;">
+
+
+
+    
+        <!-- เนื้อหา -->
+        <div onclick="openPost(${i})" style="
+          position:absolute;bottom:0;width:100%;color:white;
+          padding:10px;
+          background:linear-gradient(to top,rgba(0,0,0,1),transparent)">
+          
+          <h3>${p.title}</h3>
+          <p>${p.summary}</p>
+          <small>${p.date}</small>
+        </div>
+
+      </div>
+    `;
+  });
+
+  document.getElementById("feed").innerHTML = html;
+}
+
+function toggleMenu(i){
+  document.querySelectorAll(".menu-box").forEach(m=>m.style.display="none");
+  let box = document.getElementById("menu-"+i);
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+function deletePost(index){
+  if(confirm("ต้องการลบโพสต์นี้ไหม?")){
+    posts.splice(index,1);
+    localStorage.setItem("posts", JSON.stringify(posts));
+    renderFeed();
+  }
+}
+
+function editPost(index){
+  let newTitle = prompt("แก้ไขชื่อโพสต์", posts[index].title);
+  let newSummary = prompt("แก้ไขเรื่องย่อ", posts[index].summary);
+  let newImage = prompt("แก้ไขรูปภาพ (ลิงก์)", posts[index].image);
+
+  if(newTitle !== null) posts[index].title = newTitle;
+  if(newSummary !== null) posts[index].summary = newSummary;
+  if(newImage !== null) posts[index].image = newImage;
+
+  localStorage.setItem("posts", JSON.stringify(posts));
+  renderFeed();
+}
+
+function openPost(i){
+  location.href = "post_view.html?id=" + i;
+}
+
+renderFeed();
+</script>
+</body>
+</html>

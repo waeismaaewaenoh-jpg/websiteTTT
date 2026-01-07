@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สมัครสมาชิก</title>
+
+<style>
+body{
+    margin:0;
+    padding:0;
+    font-family:"Segoe UI", Tahoma, sans-serif;
+    background: linear-gradient(135deg,#ff4b2b,#ff416c);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.register-box{
+    width:360px;
+    background:rgba(0,0,0,0.8);
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,.5);
+    color:white;
+    text-align:center;
+}
+
+.register-box h2{
+    margin-top:0;
+    margin-bottom:15px;
+    letter-spacing:1px;
+}
+
+.register-box input{
+    width:90%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:6px;
+    border:none;
+    outline:none;
+}
+
+.register-box button{
+    width:95%;
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    background:#00e676;
+    cursor:pointer;
+    font-size:16px;
+    margin-top:8px;
+    transition:.2s;
+}
+
+.register-box button:hover{
+    background:#1de9b6;
+}
+
+.register-box a{
+    display:block;
+    margin-top:10px;
+    color:#03a9f4;
+    text-decoration:none;
+}
+
+.register-box a:hover{
+    text-decoration:underline;
+}
+</style>
+
+</head>
+
+<body>
+
+<form action="register.php" method="POST" class="register-box">
+    <h2>สมัครสมาชิก</h2>
+
+    <input type="text" name="name" placeholder="ชื่อ-นามสกุล" required>
+    <input type="email" name="email" placeholder="อีเมล" required>
+    <input type="text" name="phone" placeholder="เบอร์โทรศัพท์">
+    <input type="password" name="password" placeholder="รหัสผ่าน" required>
+
+    <button type="submit">สมัครสมาชิก</button>
+
+    <a href="login.html">กลับไปหน้าเข้าสู่ระบบ</a>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>รายละเอียดโพสต์</title>
+
+<style>
+body{
+  margin:0;
+  background:#111;
+  color:white;
+  font-family:Arial;
+}
+.box{
+  max-width:700px;
+  margin:auto;
+  padding:25px;
+}
+.back{
+  background:#444;
+  padding:6px 15px;
+  border-radius:8px;
+  text-decoration:none;
+  color:white;
+}
+.tag{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:10px;
+  background:#00b894;
+  margin-top:10px;
+}
+.content{
+  margin-top:15px;
+  background:#1d1d1d;
+  padding:15px;
+  border-radius:12px;
+  line-height:1.6;
+}
+a.btnlink{
+  display:inline-block;
+  margin-top:15px;
+  padding:8px 15px;
+  border-radius:10px;
+  background:#0984e3;
+  color:white;
+  text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <a href="history.html" class="back">← ย้อนกลับ</a>
+
+  <h2>รายละเอียดโพสต์</h2>
+
+  <div id="detail"></div>
+</div>
+
+<script>
+function loadDetail(){
+
+  let type = localStorage.getItem("history_view_type");
+  let i = localStorage.getItem("view_post_index");
+
+  let list = [];
+
+  if(type === "news"){
+    list = JSON.parse(localStorage.getItem("history_posts")) || [];
+  }else{
+    list = JSON.parse(localStorage.getItem("history_recomend")) || [];
+  }
+
+  if(i === null || !list[i]){
+    document.getElementById("detail").innerHTML = "<p>ไม่พบข้อมูล</p>";
+    return;
+  }
+
+  let p = list[i];
+
+  document.getElementById("detail").innerHTML = `
+    <div class="tag">${type === "news" ? "ข่าวสาร" : "แนะนำ"}</div>
+
+    ${p.image ? `<img src="${p.image}" class="image">` : ""}
+
+    <div class="content">
+      ${p.content || "ไม่มีเนื้อหา"}
+    </div>
+
+    ${p.link ? `<a class="btnlink" href="${p.link}" target="_blank">${p.linkName || p.linkname || "เปิดลิงก์"}</a>` : ""}
+  `;
+}
+</script>
+
+</body>
+</html>

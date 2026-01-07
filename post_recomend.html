@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>อ่านข่าว</title>
+
+<style>
+body{
+  margin:0;
+  padding:0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: linear-gradient(135deg,#1c1c1c,#444);
+  color:white;
+}
+
+/* ปุ่มย้อนกลับ */
+.back-btn{
+  display:inline-block;
+  margin:20px;
+  padding:8px 14px;
+  background:#ff9800;
+  color:white;
+  text-decoration:none;
+  border-radius:8px;
+  transition:0.2s;
+}
+.back-btn:hover{
+  background:#ffa726;
+}
+
+/* กล่องข่าว */
+.post-box{
+  width:80%;
+  max-width:900px;
+  margin:0 auto 50px auto;
+  background:rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 10px 25px rgba(0,0,0,.4);
+}
+
+/* รูป */
+.post-box img{
+  width:100%;
+  border-radius:12px;
+  margin-bottom:15px;
+}
+
+/* เนื้อหา */
+.post-title{
+  margin:10px 0;
+  font-size:28px;
+}
+
+.post-summary{
+  font-size:18px;
+  opacity:.9;
+}
+
+.date{
+  color:#ffc107;
+  font-size:14px;
+}
+
+.link-btn{
+  display:inline-block;
+  margin-top:15px;
+  padding:8px 12px;
+  background:#03a9f4;
+  color:white;
+  text-decoration:none;
+  border-radius:6px;
+}
+.link-btn:hover{
+  background:#29b6f6;
+}
+
+/* มือถือ */
+@media(max-width:700px){
+  .post-box{
+    width:92%;
+    padding:18px;
+  }
+  .post-title{
+    font-size:22px;
+  }
+}
+</style>
+
+</head>
+<body>
+
+<a href="system.php" class="back-btn">← ย้อนกลับ</a>
+
+<h2 style="text-align:center;margin-top:5px;">อ่านข่าว</h2>
+
+<div id="postser"></div>
+
+<script>
+const url = new URLSearchParams(location.search);
+const id = url.get("id");
+
+const postser = JSON.parse(localStorage.getItem("postser")) || [];
+const R = postser[id];
+
+if(!R){
+  postser.innerHTML = "<h3 style='text-align:center'>ไม่พบข่าว</h3>";
+}else{
+  post.innerHTML = `
+  <div class="post-box">
+
+    <img src="${R.imageR2}">
+    <h2 class="post-title">${R.title}</h2>
+
+    <p class="post-summary"><b>เรื่องย่อ:</b> ${R.summary}</p>
+    <p class="date">📅 วันที่: ${R.date}</p>
+
+    <hr>
+
+    <div style="white-space:pre-wrap;font-size:17px; white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;">
+      ${R.content}
+    </div>
+
+    ${R.link ? `<a class="link-btn" href="${R.link}" target="_blank">${R.linkName || "อ่านเพิ่มเติม"}</a>` : ""}
+  </div>
+  `;
+}
+</script>
+
+</body>
+</html>

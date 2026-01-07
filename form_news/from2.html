@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form 2 - เนื้อหาเต็ม</title>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial;
+  background:#111;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+
+.container{
+  width:90%;
+  max-width:650px;
+  background:rgba(255,255,255,0.07);
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 10px 25px rgba(0,0,0,.5);
+  backdrop-filter: blur(5px);
+}
+
+h2{
+  text-align:center;
+  margin-bottom:15px;
+}
+
+.input-box{
+  margin-bottom:15px;
+}
+
+label{
+  font-size:15px;
+  display:block;
+  margin-bottom:5px;
+}
+
+input,textarea{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  outline:none;
+  font-size:15px;
+  background:#222;
+  color:white;
+}
+
+textarea{
+  height:140px;
+  resize:none;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  font-size:18px;
+  background:#00b894;
+  color:white;
+  cursor:pointer;
+  transition:.2s;
+}
+
+button:hover{
+  background:#019870;
+}
+
+.back{
+  display:inline-block;
+  margin-bottom:10px;
+  color:white;
+  background:#444;
+  padding:6px 15px;
+  border-radius:8px;
+  text-decoration:none;
+}
+
+/* กล่อง preview รูป */
+.preview-area{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+
+.preview-area img{
+  width:100%;
+  height:110px;
+  object-fit:cover;
+  border-radius:10px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<a href="from1.html" class="back">← กลับ</a>
+
+<h2>Form 2 - เนื้อหาเต็ม</h2>
+
+<form onsubmit="savePost(event)">
+
+  <div class="input-box">
+    <label>เนื้อหาเต็ม</label>
+    <textarea id="content" placeholder="พิมพ์รายละเอียดเต็ม..." required></textarea>
+  </div>
+
+  <div class="input-box">
+    <label>เพิ่มรูปภายในเนื้อหา (เลือกได้หลายรูป)</label>
+    <input type="file" id="innerImages" accept="image/*" multiple>
+  </div>
+
+  <!-- Preview รูป -->
+  <div id="preview" class="preview-area"></div>
+
+  <div class="input-box">
+    <label>ลิงก์</label>
+    <input type="text" id="link" placeholder="วางลิงก์ (ถ้ามี)">
+  </div>
+
+  <div class="input-box">
+    <label>ชื่อของลิงก์</label>
+    <input type="text" id="linkName" placeholder="ชื่อปุ่มลิงก์ เช่น อ่านต่อ / ดูเพิ่มเติม">
+  </div>
+
+  <button type="submit">บันทึกโพสต์</button>
+
+</form>
+
+</div>
+
+<script>
+let innerImagesData = [];
+
+// แสดงตัวอย่างรูป
+document.getElementById("innerImages").addEventListener("change", function(){
+  innerImagesData = [];
+  const preview = document.getElementById("preview");
+  preview.innerHTML = "";
+
+  [...this.files].forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      innerImagesData.push(e.target.result);
+
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      preview.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+function savePost(e){
+  e.preventDefault();
+
+  const f1 = JSON.parse(localStorage.getItem("tempForm1"));
+
+  const post = {
+    image: f1.image,          // รูปหลักจาก form1
+    title: f1.title,
+    summary: f1.summary,
+    date: f1.date,
+    content: document.getElementById("content").value,
+
+    images: innerImagesData,   // ⭐ รูปภายในเนื้อหา (หลายรูป)
+
+    link: document.getElementById("link").value,
+    linkName: document.getElementById("linkName").value,
+    type: f1.type || "recommend"
+  };
+
+  let posts = JSON.parse(localStorage.getItem("posts")) || [];
+  posts.push(post);
+  localStorage.setItem("posts", JSON.stringify(posts));
+
+  let history = JSON.parse(localStorage.getItem("history_posts")) || [];
+  history.push(post);
+  localStorage.setItem("history_posts", JSON.stringify(history));
+
+  localStorage.removeItem("tempForm1");
+
+  location.href = "../system.php";
+}
+</script>
+
+</body>
+</html>

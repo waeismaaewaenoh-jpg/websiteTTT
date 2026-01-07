@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แก้ไขข่าวสาร (เต็ม)</title>
+
+<style>
+body{
+  background:#0f172a;
+  color:white;
+  font-family:Arial;
+}
+
+.box{
+  max-width:450px;
+  margin:40px auto;
+  padding:20px;
+  background:#111827;
+  border-radius:15px;
+}
+
+input,textarea{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  margin-top:10px;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  margin-top:15px;
+  border-radius:10px;
+  border:none;
+  background:#2563eb;
+  color:white;
+  font-size:16px;
+}
+
+button:hover{
+  background:#1d4ed8;
+}
+label{opacity:.9}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>แก้ไขข่าวสาร (เต็ม)</h2>
+
+  <label>ชื่อเรื่อง</label>
+  <input type="text" id="title">
+
+  <label>เรื่องย่อ</label>
+  <textarea id="summary" rows="3"></textarea>
+
+  <label>เนื้อหาเต็ม</label>
+  <textarea id="content" rows="6"></textarea>
+
+  <label>ลิงก์เพิ่มเติม</label>
+  <input type="text" id="link" placeholder="https://...">
+
+  <label>ชื่อปุ่มลิงก์</label>
+  <input type="text" id="linkName" placeholder="เช่น อ่านเพิ่มเติม">
+
+  <label>รูปข่าว</label>
+  <img id="previewImage" src="" style="width:100%;border-radius:10px;margin-top:10px;display:none">
+
+  <input type="file" id="imageFile" accept="image/*">
+
+  <button onclick="saveEdit()">บันทึก</button>
+  <button onclick="history.back()">ยกเลิก</button>
+</div>
+
+
+<script>
+let posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+const params = new URLSearchParams(window.location.search);
+let id = params.get("id");
+
+// ถ้ามีข้อมูล เอามาใส่ฟอร์ม
+if(posts[id]){
+  title.value = posts[id].title || "";
+  summary.value = posts[id].summary || "";
+  content.value = posts[id].content || "";
+  link.value = posts[id].link || "";
+  linkName.value = posts[id].linkName || "";
+
+  if(posts[id].image){
+    previewImage.src = posts[id].image;
+    previewImage.style.display = "block";
+  }
+}
+
+// เลือกรูปใหม่
+imageFile.addEventListener("change", function(){
+  let file = this.files[0];
+  if(!file) return;
+
+  let reader = new FileReader();
+  reader.onload = function(e){
+    previewImage.src = e.target.result;
+    previewImage.style.display = "block";
+    posts[id].image = e.target.result;
+  }
+  reader.readAsDataURL(file);
+});
+
+// บันทึก
+function saveEdit(){
+  posts[id].title = title.value;
+  posts[id].summary = summary.value;
+  posts[id].content = content.value;
+  posts[id].link = link.value;
+  posts[id].linkName = linkName.value;
+
+  localStorage.setItem("posts", JSON.stringify(posts));
+
+  alert("บันทึกสำเร็จ");
+  location.href="../system.php";
+}
+</script>
+
+</body>
+</html>

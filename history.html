@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ประวัติการโพสต์</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#111;
+  color:white;
+}
+.header{
+  padding:15px;
+  background:#222;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.back{
+  background:#444;
+  padding:6px 15px;
+  border-radius:8px;
+  text-decoration:none;
+  color:white;
+}
+.section-title{
+  font-size:20px;
+  margin:15px 0 8px 0;
+}
+.list{
+  padding:20px;
+}
+.item{
+  background:#1d1d1d;
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:12px;
+}
+.tag{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:8px;
+  background:#00b894;
+  margin-bottom:8px;
+}
+.btn{
+  padding:6px 12px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  margin-right:6px;
+}
+.view{ background:#0984e3; color:white; }
+.del{ background:#d63031; color:white; }
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <a href="system.php" class="back">← ย้อนกลับ</a>
+  <h2>ประวัติการโพสต์</h2>
+</div>
+
+<div class="list">
+
+  <div class="section-title">📢 ข่าวสาร</div>
+  <div id="newsBox"></div>
+
+  <div class="section-title">⭐ แนะนำ</div>
+  <div id="recBox"></div>
+
+</div>
+
+<script>
+function load(){
+
+  /* ---------- ดึงข้อมูล ---------- */
+  let newsPosts = JSON.parse(localStorage.getItem("posts")) || [];
+  let recPosts  = JSON.parse(localStorage.getItem("postser")) || [];
+
+  let newsBox = document.getElementById("newsBox");
+  let recBox  = document.getElementById("recBox");
+
+  /* ---------- ข่าวสาร ---------- */
+  newsBox.innerHTML = newsPosts.length === 0
+    ? "<p>ไม่มีประวัติข่าวสาร</p>"
+    : newsPosts.map((p,i)=>`
+      <div class="item">
+        <div class="tag">ข่าวสาร</div>
+
+        <div>${(p.summary || "").substring(0,70)}...</div>
+
+        <br>
+        <button class="btn view" onclick="viewNews(${i})">ดูรายละเอียด</button>
+        <button class="btn del" onclick="deleteNews(${i})">ลบ</button>
+      </div>
+    `).join("");
+
+  /* ---------- แนะนำ ---------- */
+  recBox.innerHTML = recPosts.length === 0
+    ? "<p>ไม่มีประวัติแนะนำ</p>"
+    : recPosts.map((p,i)=>`
+      <div class="item">
+        <div class="tag">แนะนำ</div>
+
+        <div>${(p.summary || "").substring(0,70)}...</div>
+
+        <br>
+        <button class="btn view" onclick="viewRec(${i})">ดูรายละเอียด</button>
+        <button class="btn del" onclick="deleteRec(${i})">ลบ</button>
+      </div>
+    `).join("");
+}
+
+/* ---------------- ดูรายละเอียด ---------------- */
+function viewNews(i){
+  localStorage.setItem("view_post_index", i);
+  location.href = "post_view.html?id="+i;
+}
+
+function viewRec(i){
+  localStorage.setItem("view_post_index", i);
+  location.href = "recomend/postser.html?id="+i;
+}
+
+/* ---------------- ลบ ---------------- */
+function deleteNews(i){
+  if(!confirm("ลบข่าวสารนี้ ?")) return;
+  let news = JSON.parse(localStorage.getItem("posts")) || [];
+  news.splice(i,1);
+  localStorage.setItem("posts", JSON.stringify(news));
+  load();
+}
+
+function deleteRec(i){
+  if(!confirm("ลบโพสต์แนะนำนี้ ?")) return;
+  let rec = JSON.parse(localStorage.getItem("postser")) || [];
+  rec.splice(i,1);
+  localStorage.setItem("postser", JSON.stringify(rec));
+  load();
+}
+
+load();
+</script>
+
+</body>
+</html>
